@@ -1,0 +1,143 @@
+\begin{frame}
+	\frametitle{Some lessons learned}
+
+	\begin{itemize}
+		\item Delving into mathematical details, e.g. derivations of formulae for posterior distributions, did not prove to be very effective.
+		\item Learning by building and running Jags models proved much more effective.
+		\item Being comfortable with R is vital. Pre-workshop R bootcamps were popular and effective.
+		\item Software installation problems can stymie progress.
+		\item For many attendees, Bayesian data analysis means Bayesian hypothesis testing (with Bayes factors). While for us, Bayesian data analysis is more about flexible probabilistic modelling.
+		\item The age of Bugs/Jags has (probably) passed, Stan is now the preferred choice as a probabilistic modelling language.
+
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conjugate prior for $\mu$ and $\sigma$}
+	\begin{itemize}
+		\item A common choice of conjugate prior is the normal/inverse-gamma distribution, also known as the \emph{normal $\times$ scaled inverse-$\chi^2$} distribution.
+		\item Thus, our full model is 
+			\begin{align*}
+				x_i &\sim \textrm{N}(\mu, \sigma^2), \quad\text{for $i\in 1, 2 \cdots n$},\\
+				\mu &\sim \textrm{N}(\mu_0, \sigma^2/\kappa_0),\\
+				\sigma^2 &\sim \textrm{Inv-}\chi^2(\nu_0, \sigma^2_0).
+			\end{align*}
+		\item This corresponds to the joint prior density 
+			\begin{align*}
+				\Prob{\mu,\sigma^2} &= \textrm{N-Inv-}\chi^2(\mu, \sigma^2 \given \mu_0, \kappa_0, \nu_0, \sigma^2_0),\\
+				&=\textrm{N}(\mu \given \mu_0, \sigma^2/\kappa_0) \times \textrm{Inv-}\chi^2(\sigma^2\given\nu_0, \sigma^2_0),\\
+				&\propto\sigma^{-1}(\sigma^2)^{-(\nu_0/2+1)} e^{\left(-\tfrac{1}{2\sigma^2}\left[ \nu_0\sigma^2_0 + \kappa_0(\mu_0  - \mu)^2 \right]\right)}
+			\end{align*}
+	\end{itemize}
+\end{frame}
+\begin{frame}
+	\frametitle{Joint posterior on $\mu$ and $\sigma$}
+	\begin{itemize}
+		\item With the normal likelihood and normal/scaled inverse-$\chi^2$ distribution, the joint posterior is:
+			\begin{align*}
+				\Prob{\mu, \sigma^2 \given D} &\propto \Prob{D\given \mu, \sigma^2} \Prob{\mu,\sigma^2},\\
+				\begin{split}
+				&\propto\sigma^{-n} e^{\left( -\tfrac{1}{2\sigma^2}\left[n s^2 + n(\bar{x}-\mu)^2\right] \right)}\\
+				&\phantom{\propto}\times \sigma^{-1}(\sigma^2)^{-(\nu_0/2+1)} e^{\left(-\tfrac{1}{2\sigma^2}\left[ \nu_0\sigma^2_0 + \kappa_0(\mu_0  - \mu)^2 \right]\right)}
+				\end{split}\\
+				& = \textrm{N-Inv-}\chi^2(\mu, \sigma^2 \given \mu_n, \kappa_n, \nu_n, \sigma_n^2)
+			\end{align*}
+		where 
+		\begin{align*}
+			\mu_n &= \frac{\kappa_0\mu_0 + n\bar{x}}{\kappa_n},\\
+			 \kappa_n     &= \kappa_0 + n,\\
+			 \nu_n &= \nu_0 + n,\\
+			 \sigma_n^2 &= \frac{1}{\nu_n}\left( \nu_0\sigma_0^2 + ns^2 + \frac{n\kappa_0}{\kappa_0 + n}(\mu_0 - \bar{x})^2\right).
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Recommendations for future workshops}
+	\framesubtitle{Syllabus}
+
+	\begin{itemize}
+
+		\item \emph{Introductory}: The fundamentals of Bayesian data analysis. Bayesian inference and Bayesian model evaluation. Introduction to sampling.
+		\item \emph{Intermediate}: Regression modelling, i.e. linear, general linear, generalized linear, multilevel regression, including robust regression, model checking, model evaluation.
+		\item \emph{Advanced}:  A wide set of topics including: Nonlinear regression, latent variable modelling, mixture modelling, time series modelling, and possibly also causal modelling, structural equation modelling, Bayesian machine learning (Bayesian deep learning), etc.
+	\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Recommendations for future workshops}
+	\framesubtitle{Format}
+
+	\begin{itemize}
+		\item Supplement workshops with video tutorial, and extensive notes (ideally a textbook).
+		\item Especially for advanced topics, more workshops, emphasizing depth rather than breadth.
+		\item Continue R workshops in parallel.
+		\item Strive for completion elimination of software etc. installation issues.
+	\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Bayes in the core curriculum?}
+
+	\begin{itemize}
+		\item Bayesian methods must coexist with sampling theory approaches. 
+		\item Can (should) Bayesian methods be taught at introductory level?
+		\item Multilevel models as the great Bayesian bait-and-switch.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Removing barriers to Bayes}
+
+	\begin{itemize}
+		\item Curriculum barriers, e.g. QAA benchmarks, BPS guidance.
+		\item Course level barriers, e.g. module specifications, validation documents.
+		\item Hidden barriers, e.g., terminology (\emph{statistical tests}, \emph{significance}, etc.), software (courses teaching SPSS).
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{BPS curriculum 2004}
+
+	\framesubtitle{curriculum defined by BPS qualifying exam}
+
+	{\scriptsize
+	\begin{itemize}
+	\item Descriptive and summary statistics \ldots
+	\item Probability theory \ldots
+	\item The normal distribution: z scores and areas under the curve; the sampling distribution of the sample mean. 
+	\item Statistical inference: significance testing (including the null and alternative hypothesis, type 1 and type 2 errors, significance level, power and sample size); 
+	\item Effect size and confidence intervals. z-tests and t-tests of means for single sample, independent samples and related samples designs. 
+	\item Confidence intervals: for the population mean; for the difference between two population means. Mean and error bar graphs. Non-parametric alternatives to t-tests: the sign test; Wilcoxon matched-pairs signed ranks test; Mann-Whitney test. Tests of proportions: chi- squared tests for goodness of fit and for contingency tables. Cramer's Phi as a measure of association in contingency tables. McNemar's test of change.
+	\item Bivariate correlation and linear regression: scatterplots; Pearson's correlation coefficient; partial correlation; the significance of a correlation coefficient; the linear regression equation and its use in prediction; the accuracy of prediction; Spearman's and Kendall's rank order correlation coefficients.
+	\item The analysis of variance: one factor independent and repeated measures designs; two factor independent, repeated measures and mixed designs; main effects and interaction effects (including graphical presentation); planned (including trend) comparisons; the Bonferroni correction; post hoc comparisons (including the choice between methods); the analysis of simple effects.
+	\item Non-parametric alternatives to one factor analyses of variance: Kruskal-Wallis, Friedman and Cochran's Q tests.
+The choice of an appropriate statistical analysis: the issue of level of measurement (nominal, ordinal, interval and ratio scales); test assumptions (e.g. normality, homogeneity of variance, linearity); transformations of the dependent variable in an attempt to meet assumptions; robustness; power efficiency.
+	\end{itemize}
+	}
+\end{frame}
+
+\begin{frame}
+	\frametitle{BPS curriculum 2017}
+
+	\framesubtitle{curriculum defined by QAA benchmarks, BPS supplementary guidance.}
+
+	{\footnotesize
+	\begin{itemize}
+		\item Students will need to know how to conduct qualitative and quantitative research. 	
+		\item This requires an awareness of different types of statistical inference such as hypothesis testing and interval estimation, whether through frequentist approaches (e.g., significance testing, confidence intervals) or recognised alternatives (e.g., Bayesian inference).
+		\item Students will require knowledge of how to plan a study including how to select an appropriate sample and sample size (e.g., statistical power), to detect differences in sample means (e.g., t tests, ANOVA) and relationships between variables (e.g., Chi square, correlation, regression). 
+		\item This should include an appreciation of the philosophy and assumptions underpinning statistical procedures that they use and familiarity with robust alternatives when those assumptions are not met (e.g. non parametric alternatives). 
+		\item They will need to understand issues relating to scale construction (e.g. reliability, factor structure).
+	\end{itemize}
+	}
+\end{frame}
